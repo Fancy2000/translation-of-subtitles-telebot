@@ -17,14 +17,16 @@ def start_command(message):
     markup.add(item1)
     bot.send_message(
         message.chat.id,
-        'Привет, я умею переводить субтитры на платформе YouTube на любой язык.\n' +
+        'Привет, я умею переводить субтитры на'
+        ' платформе YouTube на любой язык.\n' +
         'Выберите "Субтитры"', reply_markup=markup)
 
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     if call.data == 'subs':
-        tmp = bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,
+        tmp = bot.edit_message_text(chat_id=call.message.chat.id,
+                                    message_id=call.message.message_id,
                                     text="Введите ссылку на видео.",
                                     reply_markup=None)
         bot.register_next_step_handler(tmp, video_url)
@@ -35,13 +37,15 @@ def video_url(message):
     url = message.text
     youtube_api = my_class.YoutubeSubsTranslate(url)
     go_next = 0
-    no_subs = "К сожалению у этого видео нет субтитров. Повторите попытку с другим видео."
+    no_subs = "К сожалению у этого видео нет субтитров." \
+              " Повторите попытку с другим видео."
     for i in youtube_api.error_type:
         if i == "no_subs":
             bot.send_message(message.chat.id, no_subs)
             go_next = 1
     if not go_next:
-        info_lang = 'Теперь введите язык, на который хотите получить перевод. Название языка вводите с большой буквы.\n'
+        info_lang = 'Теперь введите язык, на который хотите получить' \
+                    ' перевод. Название языка вводите с большой буквы.\n'
         info_lang += "\nэто список достпуных для перевода языков:"
         list_lang = ""
         for language in youtube_api.subs_list._translation_languages:
@@ -54,8 +58,9 @@ def video_url(message):
 
 @bot.message_handler(content_types=['text'])
 def take_lang(message, youtube_api):
-    no_lang_to_translate = "К сожалению язык, который вы ввели не доступен для перевода." \
-                           " Пожалуста свертись со списком выше и повторите попытку."
+    no_lang_to_translate = "К сожалению язык, который вы ввели не" \
+                           " доступен для перевода. Пожалуста" \
+                           " свертись со списком выше и повторите попытку."
     lang = message.text
     find = 0
     for language in youtube_api.subs_list._translation_languages:
