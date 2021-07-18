@@ -8,6 +8,7 @@
 4) Установить пару библиотек:  
     a) pip install youtube_transcript_api  
     b) pip install pyTelegramBotAPI  
+
 **ЗАПУСК**  
 
     
